@@ -1,0 +1,175 @@
+import React from 'react';
+import { Pressable, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+
+interface CustomButtonProps {
+  title: string;
+  onPress: () => void;
+  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'outline';
+  disabled?: boolean;
+  loading?: boolean;
+  icon?: React.ReactNode;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+}
+
+const CustomButton: React.FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  variant = 'primary',
+  disabled = false,
+  loading = false,
+  icon = null,
+  style = {},
+  textStyle = {},
+}) => {
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'primary':
+        return {
+          button: styles.primaryButton,
+          text: styles.primaryText,
+        };
+      case 'secondary':
+        return {
+          button: styles.secondaryButton,
+          text: styles.secondaryText,
+        };
+      case 'success':
+        return {
+          button: styles.successButton,
+          text: styles.successText,
+        };
+      case 'danger':
+        return {
+          button: styles.dangerButton,
+          text: styles.dangerText,
+        };
+      case 'outline':
+        return {
+          button: styles.outlineButton,
+          text: styles.outlineText,
+        };
+      default:
+        return {
+          button: styles.primaryButton,
+          text: styles.primaryText,
+        };
+    }
+  };
+
+  const variantStyles = getVariantStyles();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled || loading}
+      style={({ pressed }) => [
+        styles.button,
+        variantStyles.button,
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+        style,
+      ]}
+    >
+      {({ pressed }) => (
+        <>
+          {loading ? (
+            <ActivityIndicator
+              color={variant === 'outline' ? '#007AFF' : '#fff'}
+              size="small"
+            />
+          ) : (
+            <>
+              {icon && <>{icon}</>}
+              <Text
+                style={[
+                  styles.text,
+                  variantStyles.text,
+                  disabled && styles.disabledText,
+                  textStyle,
+                ]}
+              >
+                {title}
+              </Text>
+            </>
+          )}
+        </>
+      )}
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 8,
+    flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  pressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.9,
+  },
+  disabled: {
+    opacity: 0.5,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  disabledText: {
+    opacity: 0.6,
+  },
+
+  primaryButton: {
+    backgroundColor: '#007AFF',
+  },
+  primaryText: {
+    color: '#fff',
+  },
+
+  secondaryButton: {
+    backgroundColor: '#8E8E93',
+  },
+  secondaryText: {
+    color: '#fff',
+  },
+
+  successButton: {
+    backgroundColor: '#34C759',
+  },
+  successText: {
+    color: '#fff',
+  },
+
+  dangerButton: {
+    backgroundColor: '#FF3B30',
+  },
+  dangerText: {
+    color: '#fff',
+  },
+
+  outlineButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: '#007AFF',
+  },
+  outlineText: {
+    color: '#007AFF',
+  },
+});
+
+export default CustomButton;
