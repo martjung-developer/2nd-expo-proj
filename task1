@@ -1,0 +1,240 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import CustomButton from '../components/CustomButton';
+
+export default function HomeScreen() {
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  const handleSubmit = () => {
+    Alert.alert(
+      'Form Submitted',
+      `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleClear = () => {
+    setName('');
+    setEmail('');
+    setMessage('');
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Welcome to My App</Text>
+        <Text style={styles.subtitle}>Fill out the form below</Text>
+
+        {/* Text Inputs */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your name"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#999"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#999"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Message</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Enter your message"
+            value={message}
+            onChangeText={setMessage}
+            multiline
+            numberOfLines={4}
+            placeholderTextColor="#999"
+          />
+        </View>
+
+        {/* Standard Button */}
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Standard Button"
+            onPress={() => Alert.alert('Standard Button', 'You pressed the standard button!')}
+            color="#007AFF"
+          />
+        </View>
+
+        {/* Pressable Examples */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.pressable,
+            pressed && styles.pressablePressed,
+          ]}
+          onPress={() => Alert.alert('Pressable', 'You pressed the pressable!')}
+        >
+          {({ pressed }) => (
+            <Text style={styles.pressableText}>
+              {pressed ? 'Pressed!' : 'Press Me (Pressable)'}
+            </Text>
+          )}
+        </Pressable>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.pressableOutline,
+            pressed && styles.pressableOutlinePressed,
+          ]}
+          onPress={() => Alert.alert('Outline Pressable', 'You pressed the outline pressable!')}
+        >
+          <Text style={styles.pressableOutlineText}>Outline Pressable</Text>
+        </Pressable>
+
+        {/* Custom Buttons */}
+        <CustomButton
+          title="Submit Form"
+          onPress={handleSubmit}
+          variant="primary"
+        />
+
+        <CustomButton
+          title="Clear Form"
+          onPress={handleClear}
+          variant="secondary"
+        />
+
+        <CustomButton
+          title="Disabled Button"
+          onPress={() => {}}
+          variant="primary"
+          disabled={true}
+        />
+
+        <CustomButton
+          title="Success Button"
+          onPress={() => Alert.alert('Success!', 'Action completed successfully')}
+          variant="success"
+        />
+
+        <CustomButton
+          title="Danger Button"
+          onPress={() => Alert.alert('Warning!', 'This is a destructive action')}
+          variant="danger"
+        />
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Expo Go Demo App</Text>
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  content: {
+    padding: 20,
+    paddingTop: 60,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  buttonContainer: {
+    marginVertical: 10,
+  },
+  pressable: {
+    backgroundColor: '#34C759',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  pressablePressed: {
+    backgroundColor: '#2DA94D',
+    transform: [{ scale: 0.98 }],
+  },
+  pressableText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  pressableOutline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: '#007AFF',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  pressableOutlinePressed: {
+    backgroundColor: '#E3F2FD',
+  },
+  pressableOutlineText: {
+    color: '#007AFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  footer: {
+    marginTop: 40,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: '#999',
+    fontSize: 14,
+  },
+});
